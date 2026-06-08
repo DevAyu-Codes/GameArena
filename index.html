@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameArena | DevAyu Studios</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === RETRO-MODERN CSS STYLING === */
+        :root {
+            --bg-color: #0b0c10;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --panel-bg: rgba(20, 22, 30, 0.7);
+            --border-glow: rgba(0, 243, 255, 0.2);
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px; 
+            color: #fff; 
+            text-align: center; 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        header { margin-bottom: 40px; }
+
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        p.subtitle { color: #aaa; font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
+
+        /* --- UI PANELS --- */
+        .panel {
+            max-width: 650px;
+            margin: 0 auto 30px auto;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- IMPORT MENU UI --- */
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group:last-child { margin-bottom: 0; }
+
+        label {
+            display: block;
+            color: var(--neon-blue);
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            background: #0d0e15;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+            transition: border 0.3s;
+        }
+
+        select:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
+
+        .upload-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            color: var(--neon-pink);
+            border: 2px dashed var(--neon-pink);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .upload-btn:hover {
+            background: rgba(255, 0, 255, 0.05);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
+        }
+
+        input[type="file"] { display: none; }
+
+        /* --- CONTROLS INFO --- */
+        .controls-info {
+            text-align: left;
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .controls-info h3 {
+            color: var(--neon-blue);
+            margin-top: 0;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .controls-info ul { padding-left: 20px; margin-bottom: 15px; }
+        .controls-info li { margin-bottom: 6px; }
+        
+        kbd {
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: monospace;
+            color: var(--neon-pink);
+            font-size: 0.85rem;
+        }
+
+        /* --- EMULATOR VIEW --- */
+        #play-view {
+            display: none; /* Changed from flex to block to fix layout crush */
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background: transparent;
+            color: var(--neon-pink);
+            border: 2px solid var(--neon-pink);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 25px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background: var(--neon-pink);
+            color: #fff;
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        /* Fixed Container Sizing */
+        #game-container { 
+            width: 100%; 
+            aspect-ratio: 4 / 3; /* Forces a proper screen ratio */
+            max-height: 70vh;    /* Prevents it from getting too tall on large screens */
+            background: #000; 
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.15);
+            overflow: hidden;
+            border: 1px solid #333;
+            margin: 0 auto;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: auto;
+            padding-top: 50px;
+            font-size: 0.9rem;
+            color: #888;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        footer a { color: var(--neon-blue); text-decoration: none; font-weight: 600; }
+        footer a:hover { text-decoration: underline; }
+
+        .developer { font-size: 1.1rem; color: #fff; margin-bottom: 10px; }
+        .disclaimer { margin-top: 15px; font-size: 0.8rem; color: #555; }
+        .copyright { margin-top: 20px; font-size: 0.85rem; color: #444; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>GameArena</h1>
+        <p class="subtitle">Bring Your Own ROMs</p>
+    </header>
+
+    <div id="menu-view">
+        
+        <div class="panel">
+            <div class="input-group">
+                <label for="core-selector">1. Select Console System</label>
+                <select id="core-selector">
+                    <option value="gba">Game Boy Advance (.gba)</option>
+                    <option value="gb">Game Boy / Color (.gb, .gbc)</option>
+                    <option value="nes">Nintendo NES (.nes)</option>
+                    <option value="snes">Super Nintendo (.sfc, .smc)</option>
+                    <option value="segaMd">Sega Genesis / Mega Drive (.md, .bin)</option>
+                    <option value="n64">Nintendo 64 (.z64, .n64)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>2. Load Game File</label>
+                <label for="rom-upload" class="upload-btn">
+                    📂 Choose Local ROM File...
+                </label>
+                <input type="file" id="rom-upload" accept=".gba,.gb,.gbc,.nes,.sfc,.smc,.md,.bin,.z64,.n64,.zip" onchange="startLocalGame(event)">
+            </div>
+        </div>
+
+        <div class="panel controls-info">
+            <h3>🎮 How to Play & Controls</h3>
+            <p><strong>Default Keyboard Mapping:</strong></p>
+            <ul>
+                <li><strong>D-Pad:</strong> <kbd>Arrow Keys</kbd></li>
+                <li><strong>A / B Buttons:</strong> <kbd>X</kbd> and <kbd>Z</kbd></li>
+                <li><strong>L / R Bumpers:</strong> <kbd>Q</kbd> and <kbd>W</kbd></li>
+                <li><strong>Start / Select:</strong> <kbd>Enter</kbd> and <kbd>Shift</kbd></li>
+            </ul>
+            <p><strong>Customizing Controls:</strong> Once the game boots, look for the small <strong>Menu/Gamepad Icon</strong> at the bottom or top of the game screen. Clicking this opens the Emulator settings where you can remap your keyboard, connect a Bluetooth controller, or adjust save states!</p>
+        </div>
+
+    </div>
+
+    <div id="play-view">
+        <button class="btn-back" onclick="window.location.reload()">&#8592; Exit Game</button>
+        <div id="game-container"></div>
+    </div>
+
+    <footer>
+        <div class="developer">Developed by <a href="https://github.com/DevAyu-Codes" target="_blank">Ayu Kashyap</a> ❤️</div>
+        
+        <p class="disclaimer"><strong>Disclaimer:</strong> GameArena is an emulation tool only and does not host, provide, or distribute copyrighted ROMs, BIOS files, or game assets. Users are solely responsible for ensuring they have the legal right to use the game files they import. We do not support piracy.</p>
+        
+        <div class="copyright">&copy; 2026 by DevAyu Studios. All rights reserved.</div>
+    </footer>
+
+    <script>
+        function startLocalGame(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const selectedCore = document.getElementById('core-selector').value;
+            const localFileUrl = URL.createObjectURL(file);
+
+            // 1. Hide the menu wrapper, show the play view as a standard block
+            document.getElementById('menu-view').style.display = 'none';
+            document.getElementById('play-view').style.display = 'block';
+
+            // 2. Set the global configuration variables for EmulatorJS
+            window.EJS_player = '#game-container';
+            window.EJS_core = selectedCore; 
+            window.EJS_gameUrl = localFileUrl; 
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+
+            // 3. Dynamically load the EmulatorJS script
+            const script = document.createElement('script');
+            script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+            document.body.appendChild(script);
+        }
+    </script>
+
+</body>
+</html>
