@@ -50,7 +50,7 @@ Developed with ❤️ by **Ayu Kashyap**
 
 ## ⚖️ Disclaimer
 
-GameArena is an emulation frontend tool only and **does not** host, provide, or distribute copyrighted ROMs, BIOS files, or game assets. Users are solely responsible for ensuring they have the legal right to own and use the game files they import into this application. We do not support piracy.
+GameArena is an emulation frontend only and **does not** host, provide, or distribute copyrighted ROMs, BIOS files, or game assets. Users are solely responsible for ensuring they have the legal right to own and use the game files they import into this application. We do not support piracy.
 
 ---
 *© 2026 by DevAyu Studios. All rights reserved.*
